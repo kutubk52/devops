@@ -40,7 +40,7 @@ pipeline {
                 chmod 600 ~/.ssh/known_hosts
 
                 cat ~/.ssh/known_hosts
-                """`
+                """
             }
         }
        
