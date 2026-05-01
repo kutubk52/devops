@@ -18,8 +18,7 @@ pipeline {
         stage('Read JSON') {
             steps {
                 script {
-                    def jsonPath = "${WORKSPACE}/${params.CONFIG_JSON}"
-                    def json = readJSON file: jsonPath
+                    def json = readJSON file: params.CONFIG_JSON
 
                     if (!json.target_host) {
                         error("target_host missing!")
