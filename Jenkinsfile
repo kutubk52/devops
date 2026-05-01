@@ -8,21 +8,23 @@ pipeline {
 
     stages {
 
-        stage('Read JSON FIRST') {
+        stage('Read JSON') {
             steps {
                 script {
 
-                    echo "CONFIG_JSON param = ${params.CONFIG_JSON}"
+                    echo "JSON TEXT: ${params.CONFIG_JSON_TEXT}"
 
-                    if (!params.CONFIG_JSON) {
-                        error("❌ CONFIG_JSON not uploaded!")
+                    if (!params.CONFIG_JSON_TEXT?.trim()) {
+                        error("❌ CONFIG_JSON_TEXT is empty!")
                     }
 
-                    def json = readJSON file: params.CONFIG_JSON
+                    def json = readJSON text: params.CONFIG_JSON_TEXT
 
+                    env.TARGET_HOST = json.target_host
                     env.SCRIPT_NAME = json.script_name
                     env.MESSAGE = json.message
-                    env.TARGET_HOST = json.target_host
+
+                    echo "Target: ${env.TARGET_HOST}"
                 }
             }
         }
