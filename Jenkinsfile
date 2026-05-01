@@ -26,18 +26,23 @@ pipeline {
             }
         }
 
-        stage('Read JSON') {
+        tage('Read JSON') {
             steps {
                 script {
-                    def json = readJSON file: params.CONFIG_JSON
 
-                    if (!json.target_host) {
-                        error("target_host missing!")
+                    echo "CONFIG_JSON param = ${params.CONFIG_JSON}"
+
+                    if (!params.CONFIG_JSON) {
+                        error("❌ CONFIG_JSON not uploaded or not passed!")
                     }
 
-                    env.TARGET_HOST = json.target_host
+                    sh "ls -l"
+
+                    def json = readJSON file: params.CONFIG_JSON
+
                     env.SCRIPT_NAME = json.script_name
                     env.MESSAGE = json.message
+                    env.TARGET_HOST = json.target_host
                 }
             }
         }
