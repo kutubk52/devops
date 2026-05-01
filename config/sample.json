@@ -1,0 +1,5 @@
+{
+  "target_host": "<TARGET_IP>",
+  "script_name": "deploy.sh",
+  "message": "Hello from Jenkins Pipeline"
+}
