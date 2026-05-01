@@ -7,12 +7,22 @@ pipeline {
     }
 
     stages {
-        cleanWs()
-
         stage('Checkout') {
             steps {
-                git branch: "${params.BRANCH}",
-                    url: 'https://github.com/kutubk52/devops.git'
+                cleanWs()
+
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${params.BRANCH}"]],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/kutubk52/devops.git'
+                    ]],
+                    extensions: [
+                        [$class: 'CleanBeforeCheckout']
+                    ]
+                ])
+
+            sh "git log -1"
             }
         }
 
