@@ -8,6 +8,15 @@ pipeline {
 
     stages {
 
+        stage('Debug SSH') {
+            steps {
+                sh '''
+                whoami
+                echo "HOME=$HOME"
+                ls -l ~/.ssh
+                '''
+            }
+        }
         stage('Read JSON') {
             steps {
                 script {
