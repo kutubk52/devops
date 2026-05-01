@@ -8,15 +8,6 @@ pipeline {
 
     stages {
 
-        stage('Debug SSH') {
-            steps {
-                sh '''
-                whoami
-                echo "HOME=$HOME"
-                ls -l ~/.ssh
-                '''
-            }
-        }
         stage('Setup SSH for Jenkins') {
             steps {
                 sh '''
