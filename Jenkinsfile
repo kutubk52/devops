@@ -7,36 +7,16 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                cleanWs()
 
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: "*/${params.BRANCH}"]],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/kutubk52/devops.git'
-                    ]],
-                    extensions: [
-                        [$class: 'CleanBeforeCheckout']
-                    ]
-                ])
-
-            sh "git log -1"
-            }
-        }
-
-        stage('Read JSON') {
+        stage('Read JSON FIRST') {
             steps {
                 script {
 
                     echo "CONFIG_JSON param = ${params.CONFIG_JSON}"
 
                     if (!params.CONFIG_JSON) {
-                        error("❌ CONFIG_JSON not uploaded or not passed!")
+                        error("❌ CONFIG_JSON not uploaded!")
                     }
-
-                    sh "ls -l"
 
                     def json = readJSON file: params.CONFIG_JSON
 
@@ -44,6 +24,17 @@ pipeline {
                     env.MESSAGE = json.message
                     env.TARGET_HOST = json.target_host
                 }
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                cleanWs()   // now safe
+
+                git branch: "${params.BRANCH}",
+                    url: 'https://github.com/kutubk52/devops.git'
+
+                sh "git log -1"
             }
         }
 
