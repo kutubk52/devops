@@ -8,22 +8,7 @@ pipeline {
 
     stages {
 
-        stage('Setup SSH for Jenkins') {
-            steps {
-                sh """
-                mkdir -p ~/.ssh
-                chmod 700 ~/.ssh
-
-                echo "Target host is: ${TARGET_HOST}"
-
-                ssh-keyscan -H ${TARGET_HOST} >> ~/.ssh/known_hosts
-                chmod 600 ~/.ssh/known_hosts
-
-                cat ~/.ssh/known_hosts
-                """
-            }
-        }
-        stage('Read JSON') {
+         stage('Read JSON') {
             steps {
                 script {
 
@@ -43,6 +28,22 @@ pipeline {
                 }
             }
         }
+        stage('Setup SSH for Jenkins') {
+            steps {
+                sh """
+                mkdir -p ~/.ssh
+                chmod 700 ~/.ssh
+
+                echo "Target host is: ${env.TARGET_HOST}"
+
+                ssh-keyscan -H ${env.TARGET_HOST} >> ~/.ssh/known_hosts
+                chmod 600 ~/.ssh/known_hosts
+
+                cat ~/.ssh/known_hosts
+                """`
+            }
+        }
+       
 
         stage('Checkout') {
             steps {
@@ -59,8 +60,8 @@ pipeline {
             steps {
                 sh """
                 ansible-playbook ansible/playbook.yml \
-                -i '${TARGET_HOST},' \
-                --extra-vars "script_name=${SCRIPT_NAME} message='${MESSAGE}' workspace=${WORKSPACE}"
+                -i '${env.TARGET_HOST},' \
+                --extra-vars "script_name=${env.SCRIPT_NAME} message='${env.MESSAGE}' workspace=${env.WORKSPACE}"
                 """
             }
         }
