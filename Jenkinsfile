@@ -59,8 +59,10 @@ pipeline {
         stage('Run Ansible') {
             steps {
                 sh """
+                ANSIBLE_HOST_KEY_CHECKING=False \
                 ansible-playbook ansible/playbook.yml \
                 -i '${env.TARGET_HOST},' \
+                -u cloud_user \
                 --extra-vars "script_name=${env.SCRIPT_NAME} message='${env.MESSAGE}' workspace=${env.WORKSPACE}"
                 """
             }
