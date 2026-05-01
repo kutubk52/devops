@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-        tage('Read JSON') {
+        stage('Read JSON') {
             steps {
                 script {
 
