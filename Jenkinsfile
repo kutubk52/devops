@@ -10,15 +10,17 @@ pipeline {
 
         stage('Setup SSH for Jenkins') {
             steps {
-                sh '''
+                sh """
                 mkdir -p ~/.ssh
                 chmod 700 ~/.ssh
+
+                echo "Target host is: ${TARGET_HOST}"
 
                 ssh-keyscan -H ${TARGET_HOST} >> ~/.ssh/known_hosts
                 chmod 600 ~/.ssh/known_hosts
 
-                echo "SSH setup done"
-                '''
+                cat ~/.ssh/known_hosts
+                """
             }
         }
         stage('Read JSON') {
